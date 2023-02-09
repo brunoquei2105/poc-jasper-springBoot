@@ -1,0 +1,26 @@
+version: '3.8'
+
+networks:
+  project_jasper_spring:
+    driver: bridge
+
+volumes:
+  db_data: {}
+
+services:
+  database:
+    container_name: project_jasper_spring_mysql
+    image: mysql:8.0.22
+    volumes:
+      - db_data:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=jasper_spring
+      - MYSQL_USER=admin
+      - MYSQL_PASSWORD=root
+    ports:
+      - '3306:3306'
+    networks:
+        - project_jasper_spring
+    restart: always
+
