@@ -1,4 +1,4 @@
-package com.example.jarperspring;
+package com.example.jasper_spring;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
