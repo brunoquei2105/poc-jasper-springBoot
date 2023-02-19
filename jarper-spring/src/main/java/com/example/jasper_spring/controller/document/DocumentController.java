@@ -56,7 +56,7 @@ public class DocumentController {
     )
     @GetMapping(value = "/download/{fileName}")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<?> downloadDoc(@PathVariable String fileName){
+    public ResponseEntity<byte[]> downloadDoc(@PathVariable String fileName){
 
         byte[] doc;
         try{
@@ -66,6 +66,47 @@ public class DocumentController {
         catch (Exception e){
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Cannot upload file", e.getCause());
         }
+        return ResponseEntity.status(HttpStatus.OK)
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename="+ fileName)
+                .body(doc);
+
+    }
+    @Operation(
+            responses = {@ApiResponse(description = "Save a file on a file system", responseCode = "201")},
+            summary = "",
+            tags = {}
+    )
+    @PostMapping(value = "/uploadToFileSystem", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @ResponseStatus(HttpStatus.CREATED)
+    public ResponseEntity<String> uploadFromFileSystem(@RequestParam MultipartFile file){
+        String response;
+        try{
+           response =  documentService.uploadToFileSystem(file);
+        }
+        catch (Exception e){
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Cannot upload file", e.getCause());
+        }
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(response);
+
+    }
+    @Operation(
+            responses = {@ApiResponse(description = "Retrieve a file from DB.", responseCode = "201")},
+            summary = "",
+            tags = {}
+    )
+    @GetMapping(value = "/downloadFromFileSystem/{fileName}", produces = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<byte[]> downloadFromFileSystem(@PathVariable String fileName){
+
+        byte[] doc;
+        try{
+            doc = documentService.downloadFromFileSystem(fileName);
+        }
+        catch (Exception e){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "File not found: " + fileName, e.getCause());
+        }
+
         return ResponseEntity.status(HttpStatus.OK)
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename="+ fileName)
                 .body(doc);

@@ -10,6 +10,7 @@ import java.util.Optional;
 public interface DocumentService {
 
     Document uploadDoc(MultipartFile file) throws IOException;
-
     byte[] dowloadDoc(String fileName);
+    String uploadToFileSystem(MultipartFile file) throws IOException;
+    byte[] downloadFromFileSystem(String fileName) throws IOException;
 }
