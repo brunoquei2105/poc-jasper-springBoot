@@ -1,9 +1,11 @@
 package com.example.jasper_spring.models.user;
 
+import jakarta.mail.Multipart;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.math.BigDecimal;
 
@@ -22,4 +24,7 @@ public class User {
     private String email;
     private String phoneNumber;
     private String salary;
+
+
+
 }
